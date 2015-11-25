@@ -22,7 +22,7 @@ namespace Monopol
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine(String.Join(":", game.throw_dice()) + "\n");
+           game.throw_dice();
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
@@ -32,7 +32,7 @@ namespace Monopol
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            game.board_init(ref game.board);
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -41,6 +41,7 @@ namespace Monopol
             {
                 menu.ShowDialog(this);
             }
+            game.board_init(ref game.board);
         }
     }
 }

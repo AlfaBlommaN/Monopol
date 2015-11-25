@@ -9,7 +9,9 @@ namespace Monopol
    public class Space
     {
 
-        public Space (string name_)
+       public Space() { }
+ 
+       public Space (string name_)
         {
             name = name_;
         }
@@ -19,10 +21,12 @@ namespace Monopol
 
     public class Property :  Space 
     {
+        public string owner { get; set; }
         public int cost {get; private set;}
 
         public Property (string name_, int cost_) : base(name_)
         {
+            owner = "";
             cost = cost_;
         }
 
@@ -30,4 +34,14 @@ namespace Monopol
 
 
     }
+    public class GoToJail : Space
+    {
+
+    }
+    
+    public class Bisys : Space
+    {
+        
+    }
+
 }

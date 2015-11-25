@@ -9,9 +9,10 @@ namespace Monopol
 {
     public class Player
     {
-        string name;
+        public string name { get; private set; }
         int cash;
-        int position;
+        public bool prisoner; 
+        public int position{get; private set;}
 
         public Player(string name, int cash = 1500, int position = 0)
         {
@@ -31,6 +32,11 @@ namespace Monopol
             else
                 position = position + steps - 40;
             Debug.WriteLine(position);
+        }
+
+        public void GoTo(int position)
+        {
+            this.position = position;
         }
 
     }
