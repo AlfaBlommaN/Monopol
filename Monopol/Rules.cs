@@ -15,12 +15,17 @@ namespace Monopol
     {
         static public void CheckState(Player player, Game game)
         {
+            player.AllowPlayerToBuyProperty(false);
             Debug.WriteLine(PositionType(player, game).ToString());
             if (PositionType(player, game) == Spaces.GoToJail)
             {
                 game.BustPlayer(player);
             }
-   
+            else if (PositionType(player, game) == Spaces.AvailableProperty)
+            {
+                player.AllowPlayerToBuyProperty(game.board[player.position] as Property);
+            }
+
         }
 
         static bool CheckIfJail(Player player, Game game)

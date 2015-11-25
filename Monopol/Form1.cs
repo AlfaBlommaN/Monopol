@@ -43,5 +43,10 @@ namespace Monopol
             }
             game.board_init(ref game.board);
         }
+
+        private void ResposeButton_Click(object sender, EventArgs e)
+        {
+            game.GetCurrPlayer().BuyProperty();                
+        }
     }
 }

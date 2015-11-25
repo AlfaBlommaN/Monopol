@@ -11,15 +11,45 @@ namespace Monopol
     {
         public string name { get; private set; }
         int cash;
-        public bool prisoner; 
+        public bool prisoner;
+        public bool responded = false;
         public int position{get; private set;}
+        private bool allowedBuy;
+        private Property tmpProp;
 
-        public Player(string name, int cash = 1500, int position = 0)
+        public Player(string name, int cash = 15000, int position = 0)
         {
             this.name = name;
             this.cash = cash;
             this.position = position;
         }
+
+        public void AllowPlayerToBuyProperty(Property prop)
+        {
+            Debug.WriteLine("Skoja bara!");
+            tmpProp = prop;
+            allowedBuy = true;
+        }
+        public void AllowPlayerToBuyProperty(bool no)
+        {
+            allowedBuy = false;
+            Debug.WriteLine("Här får du inte handla!");
+        }
+
+        public void BuyProperty()
+        {
+            if (allowedBuy && cash >= tmpProp.cost)
+            {
+                cash = cash - tmpProp.cost;
+                tmpProp.owner = name;
+                allowedBuy = false;
+
+                Debug.WriteLine("Grattis");
+            }
+            else
+                Debug.WriteLine("Ledsen kompis, du får inte köpa");
+        }
+
 
         /// <summary>
         /// Låt spelaren traversa över spelplanen

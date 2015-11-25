@@ -40,6 +40,7 @@ namespace Monopol
 
         public int[] throw_dice()
         {
+            NextTurn();
             int[] dices = new int[2];
             Random rnd = new Random();
             dices[1] = rnd.Next(1, 7);
@@ -47,8 +48,13 @@ namespace Monopol
             players[playerturn].Go(dices[0] + dices[1]);
             Debug.WriteLine(players[playerturn].name + " slår " + (dices[0] + dices[1]).ToString());
             Rules.CheckState(players[playerturn], this);
-            NextTurn();
+            
             return dices;
+        }
+
+        public Player GetCurrPlayer()
+        {
+            return players[playerturn];
         }
 
         public void addPlayer(string name)
