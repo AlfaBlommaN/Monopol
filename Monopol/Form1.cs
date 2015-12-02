@@ -13,7 +13,7 @@ namespace Monopol
 {
     public partial class Form1 : Form
     {
-
+        List<PictureBox> playerImages;
         Game game = new Game();
         public Form1()
         {

@@ -25,6 +25,10 @@ namespace Monopol
             {
                 player.AllowPlayerToBuyProperty(game.board[player.position] as Property);
             }
+            else if (PositionType(player, game) == Spaces.OwnedProperty)
+            {
+                player.PayOpponent(game.findPlayer((game.board[player.position] as Property).owner), (game.board[player.position] as Property).rent);
+            }
 
         }
 

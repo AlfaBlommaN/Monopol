@@ -41,6 +41,7 @@ namespace Monopol
         public int[] throw_dice()
         {
             NextTurn();
+            Debug.WriteLine("\n" + players[playerturn].name + ": " + players[playerturn].cash.ToString());
             int[] dices = new int[2];
             Random rnd = new Random();
             dices[1] = rnd.Next(1, 7);
@@ -68,6 +69,11 @@ namespace Monopol
             Debug.WriteLine(player.name + " fängslas!!!!");
             player.prisoner = true;
             player.GoTo(jailpos);
+        }
+
+        public Player findPlayer(string name)
+        {
+            return players.Find(x => x.name == name);
         }
 
     }

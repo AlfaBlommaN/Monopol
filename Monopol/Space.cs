@@ -24,10 +24,13 @@ namespace Monopol
         public string owner { get; set; }
         public int cost {get; private set;}
 
-        public Property (string name_, int cost_) : base(name_)
+        public int rent;
+
+        public Property (string name_, int cost_, int rent_ = 500) : base(name_)
         {
             owner = "";
             cost = cost_;
+            rent = rent_;
         }
 
 

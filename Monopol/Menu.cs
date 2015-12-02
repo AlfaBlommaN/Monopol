@@ -27,6 +27,7 @@ namespace Monopol
                 game.addPlayer(textBoxPlayerName.Text);
             else
                 MessageBox.Show("Ange ett namn, kompis!");
+
         }
 
         private void buttonStartGame_Click(object sender, EventArgs e)

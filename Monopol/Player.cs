@@ -10,7 +10,7 @@ namespace Monopol
     public class Player
     {
         public string name { get; private set; }
-        int cash;
+        public int cash;
         public bool prisoner;
         public bool responded = false;
         public int position{get; private set;}
@@ -29,6 +29,12 @@ namespace Monopol
             Debug.WriteLine("Skoja bara!");
             tmpProp = prop;
             allowedBuy = true;
+        }
+        public void PayOpponent(Player opponent, int money)
+        {
+            Debug.WriteLine("TESTING TESTING 12 12");
+            cash = cash - money;
+            opponent.cash += money;
         }
         public void AllowPlayerToBuyProperty(bool no)
         {
