@@ -29,7 +29,26 @@ namespace Monopol
             {
                 player.PayOpponent(game.findPlayer((game.board[player.position] as Property).owner), (game.board[player.position] as Property).rent);
             }
+            
+            if (player.cash < 0)
+            {
+                kickPlayer(player, game);
+            }
 
+            if (game.players.Count() == 1)
+                winGame();
+
+        }
+
+        static private void kickPlayer(Player player, Game game)
+        {
+            player.active = false;
+
+        }
+
+        static public void winGame()
+        {
+            
         }
 
         static bool CheckIfJail(Player player, Game game)

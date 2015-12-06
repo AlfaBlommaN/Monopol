@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Monopol
 {
@@ -19,23 +20,50 @@ namespace Monopol
         {
             InitializeComponent();
             this.game = game;
+            this.ActiveControl = textBoxPlayerName;
         }
 
         private void buttonAddPlayer_Click(object sender, EventArgs e)
+        {
+            addPlayer();
+        }
+
+        private void buttonStartGame_Click(object sender, EventArgs e)
+        {
+            startGame();
+        }
+
+        private void addPlayer()
         {
             if (textBoxPlayerName.Text != "" && textBoxPlayerName.Text.Count() < 20)
                 game.addPlayer(textBoxPlayerName.Text);
             else
                 MessageBox.Show("Ange ett namn, kompis!");
 
+            textBoxPlayerName.Text = "";
         }
 
-        private void buttonStartGame_Click(object sender, EventArgs e)
+        private void startGame()
         {
             if (game.players.Count() > 1)
                 this.Close();
             else
                 MessageBox.Show("Minst två spelare");
         }
+
+        private void textBoxPlayerName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                e.Handled = true;
+                addPlayer();
+            }
+            else if (e.KeyChar == (char)Keys.Escape)
+            {
+                e.Handled = true;
+                startGame();
+            }
+        }
+
     }
 }

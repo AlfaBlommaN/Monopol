@@ -22,6 +22,9 @@ namespace Monopol
                 playerturn = 0;
             else
                 ++playerturn;
+
+            if (players[playerturn].active == false)
+                NextTurn();
         }
 
 
@@ -56,6 +59,11 @@ namespace Monopol
         public Player GetCurrPlayer()
         {
             return players[playerturn];
+        }
+
+        public Space getCurrSpace()
+        {
+            return board[GetCurrPlayer().position];
         }
 
         public void addPlayer(string name)

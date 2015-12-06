@@ -50,6 +50,7 @@
             this.textBoxPlayerName.Name = "textBoxPlayerName";
             this.textBoxPlayerName.Size = new System.Drawing.Size(119, 20);
             this.textBoxPlayerName.TabIndex = 1;
+            this.textBoxPlayerName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxPlayerName_KeyPress);
             // 
             // labelPlayerName
             // 
@@ -75,10 +76,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(177, 164);
-            this.Controls.Add(this.buttonStartGame);
-            this.Controls.Add(this.labelPlayerName);
             this.Controls.Add(this.textBoxPlayerName);
             this.Controls.Add(this.buttonAddPlayer);
+            this.Controls.Add(this.buttonStartGame);
+            this.Controls.Add(this.labelPlayerName);
             this.Name = "Menu";
             this.Text = "Menu";
             this.ResumeLayout(false);

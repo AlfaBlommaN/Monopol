@@ -13,11 +13,12 @@ namespace Monopol
         public int cash;
         public bool prisoner;
         public bool responded = false;
+        public bool active = true;
         public int position{get; private set;}
         private bool allowedBuy;
         private Property tmpProp;
 
-        public Player(string name, int cash = 15000, int position = 0)
+        public Player(string name, int cash = 5000, int position = 0)
         {
             this.name = name;
             this.cash = cash;
