@@ -16,7 +16,11 @@ namespace Monopol
         static public void CheckState(Player player, Game game)
         {
             player.AllowPlayerToBuyProperty(false);
-            Debug.WriteLine(PositionType(player, game).ToString());
+            Debug.WriteLine("Plats: " + game.board[player.position].name + ", " + PositionType(player, game).ToString());
+            if (player.cash < 0)
+            {
+                kickPlayer(player);
+            }
             if (PositionType(player, game) == Spaces.GoToJail)
             {
                 game.BustPlayer(player);
@@ -29,26 +33,19 @@ namespace Monopol
             {
                 player.PayOpponent(game.findPlayer((game.board[player.position] as Property).owner), (game.board[player.position] as Property).rent);
             }
-            
-            if (player.cash < 0)
+            else if (PositionType(player, game) == Spaces.Bisys)
             {
-                kickPlayer(player, game);
+                game.newBisys();
+                player.cash += (game.currentBisys.value);
+                Debug.WriteLine(game.currentBisys.message + " " + game.currentBisys.value + " kr");
             }
 
-            if (game.players.Count() == 1)
-                winGame();
-
         }
 
-        static private void kickPlayer(Player player, Game game)
+        static private void kickPlayer(Player player)
         {
             player.active = false;
-
-        }
-
-        static public void winGame()
-        {
-            
+            Debug.WriteLine(player.name + " har förlorat!");
         }
 
         static bool CheckIfJail(Player player, Game game)
@@ -73,7 +70,7 @@ namespace Monopol
                     return Spaces.OwnedProperty;
             }
 
-            else if (game.board[player.position].GetType() == typeof(Bisys))
+            else if (game.board[player.position].GetType() == typeof(BisysSpace))
                 return Spaces.Bisys;
 
             else

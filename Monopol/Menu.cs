@@ -46,7 +46,7 @@ namespace Monopol
         private void startGame()
         {
             if (game.players.Count() > 1)
-                this.Close();
+                this.DialogResult = DialogResult.Yes;
             else
                 MessageBox.Show("Minst två spelare");
         }
@@ -64,6 +64,7 @@ namespace Monopol
                 startGame();
             }
         }
+
 
     }
 }

@@ -11,14 +11,15 @@ namespace Monopol
     {
         public string name { get; private set; }
         public int cash;
-        public bool prisoner;
+        public bool prisoner = false;
         public bool responded = false;
         public bool active = true;
         public int position{get; private set;}
-        private bool allowedBuy;
+        private bool allowedBuy = false;
         private Property tmpProp;
+        public string icon = "";
 
-        public Player(string name, int cash = 5000, int position = 0)
+        public Player(string name, int cash = 15000, int position = 0)
         {
             this.name = name;
             this.cash = cash;
@@ -27,20 +28,18 @@ namespace Monopol
 
         public void AllowPlayerToBuyProperty(Property prop)
         {
-            Debug.WriteLine("Skoja bara!");
             tmpProp = prop;
             allowedBuy = true;
         }
         public void PayOpponent(Player opponent, int money)
         {
-            Debug.WriteLine("TESTING TESTING 12 12");
+            Debug.WriteLine(this.name + " betalar " + money.ToString() + " kr till " + opponent.name);
             cash = cash - money;
             opponent.cash += money;
         }
         public void AllowPlayerToBuyProperty(bool no)
         {
             allowedBuy = false;
-            Debug.WriteLine("Här får du inte handla!");
         }
 
         public void BuyProperty()
@@ -50,11 +49,7 @@ namespace Monopol
                 cash = cash - tmpProp.cost;
                 tmpProp.owner = name;
                 allowedBuy = false;
-
-                Debug.WriteLine("Grattis");
             }
-            else
-                Debug.WriteLine("Ledsen kompis, du får inte köpa");
         }
 
 
@@ -68,7 +63,7 @@ namespace Monopol
                 position = position + steps;
             else
                 position = position + steps - 40;
-            Debug.WriteLine(position);
+            Debug.WriteLine("Position: " + position);
         }
 
         public void GoTo(int position)

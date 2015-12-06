@@ -73,6 +73,16 @@ namespace Monopol.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Monopol1 {
+            get {
+                object obj = ResourceManager.GetObject("Monopol1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap west {
             get {
                 object obj = ResourceManager.GetObject("west", resourceCulture);

@@ -80,8 +80,9 @@
             this.Controls.Add(this.buttonAddPlayer);
             this.Controls.Add(this.buttonStartGame);
             this.Controls.Add(this.labelPlayerName);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Menu";
-            this.Text = "Menu";
+            this.Text = "Monopol";
             this.ResumeLayout(false);
             this.PerformLayout();
 

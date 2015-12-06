@@ -17,7 +17,16 @@ namespace Monopol
             InitializeComponent();
             richTextBox1.Text = text;
             this.ActiveControl = buttonYes;
+        }
 
+        public DialogForm(string text, bool ok)
+        {
+            InitializeComponent();
+            richTextBox1.Text = text;
+            buttonNo.Hide();
+            buttonYes.Text = "OK";
+            buttonYes.Location = new Point(this.Width / 2 - (buttonYes.Width / 2), buttonYes.Location.Y);
+            this.ActiveControl = buttonYes;
         }
 
         private void buttonYes_Click(object sender, EventArgs e)
