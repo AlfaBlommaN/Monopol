@@ -20,7 +20,7 @@ namespace Monopol
 
         Game game = new Game();
         Graphics graphics;
-        Bitmap background = new Bitmap(global::Monopol.Properties.Resources.Monopol1, new Size(685, 685));
+        Bitmap background = new Bitmap(global::Monopol.Properties.Resources.Board, new Size(685, 685));
         public Form1()
         {
             InitializeComponent();
@@ -62,9 +62,9 @@ namespace Monopol
             if (game.currentBisys.message != "")
             {
                 if (game.currentBisys.value < 0)
-                    DisplayMessage(game.GetCurrPlayer().name + " hittar en bisyssla!\n" + game.currentBisys.message + "\nDu förlorar " + game.currentBisys.value.ToString().Remove(0, 1) + " kr.");
+                    DisplayMessage("Bisyssla!\n" + game.GetCurrPlayer().name + " " + game.currentBisys.message + "\nDu förlorar " + game.currentBisys.value.ToString().Remove(0, 1) + " kr.");
                 else
-                    DisplayMessage("Bisyssla!\n" + game.currentBisys.message + "\nDu cashar in " + game.currentBisys.value.ToString() + " kr.");
+                    DisplayMessage("Bisyssla!\n" + game.GetCurrPlayer().name + " " + game.currentBisys.message + "\nDu cashar in " + game.currentBisys.value.ToString() + " kr.");
                 game.resetBisys();
             }
 
@@ -95,7 +95,12 @@ namespace Monopol
             foreach (Player p in game.players)
             {
                 if (p.active)
-                    statsTextBox.AppendText(p.name + Environment.NewLine + p.cash + " kr " + Environment.NewLine + Environment.NewLine);
+                {
+                    statsTextBox.SelectionColor = p.color;
+                    statsTextBox.AppendText(p.name + Environment.NewLine);
+                    statsTextBox.SelectionColor = System.Drawing.Color.Black;
+                    statsTextBox.AppendText(p.cash + " kr " + Environment.NewLine + Environment.NewLine);
+                }
                 else
                 {
                     statsTextBox.SelectionColor = System.Drawing.Color.Gray;
@@ -110,6 +115,7 @@ namespace Monopol
 
         private void UpdateGraphics()
         {
+            updateStats();
             graphics = pictureBox1.CreateGraphics();
             graphics.DrawImage(background, 0, 0);
             Point gfxPos = new Point(0, 0);
@@ -133,6 +139,7 @@ namespace Monopol
                     else if (game.players[i].position > 30)
                         gfxPos = new Point(10 + (i * 2), 660 - ((game.players[i].position - 29) * 57 + (i * 2)));
 
+                    graphics.FillEllipse(new SolidBrush(game.players[i].color), new Rectangle(new Point(gfxPos.X - 3, gfxPos.Y - 3), new Size(35, 35)));
                     graphics.DrawImage(icons[i], gfxPos);
                 }
             }

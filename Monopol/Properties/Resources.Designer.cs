@@ -63,6 +63,26 @@ namespace Monopol.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Board {
+            get {
+                object obj = ResourceManager.GetObject("Board", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Board_0_1 {
+            get {
+                object obj = ResourceManager.GetObject("Board_0.1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Monopol {
             get {
                 object obj = ResourceManager.GetObject("Monopol", resourceCulture);
@@ -76,6 +96,16 @@ namespace Monopol.Properties {
         internal static System.Drawing.Bitmap Monopol1 {
             get {
                 object obj = ResourceManager.GetObject("Monopol1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ram {
+            get {
+                object obj = ResourceManager.GetObject("ram", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

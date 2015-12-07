@@ -26,15 +26,12 @@ namespace Monopol
 
         public int rent;
 
-        public Property (string name_, int cost_, int rent_ = 500) : base(name_)
+        public Property (string name_, int cost_) : base(name_)
         {
             owner = "";
             cost = cost_;
-            rent = rent_;
+            rent = Convert.ToInt32(cost * 0.4);
         }
-
-
-
 
     }
     public class GoToJail : Space

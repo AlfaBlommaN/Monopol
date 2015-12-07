@@ -43,14 +43,14 @@
             this.richTextBox1.Location = new System.Drawing.Point(12, 12);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(232, 62);
+            this.richTextBox1.Size = new System.Drawing.Size(204, 103);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
             // buttonYes
             // 
             this.buttonYes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonYes.Location = new System.Drawing.Point(12, 80);
+            this.buttonYes.Location = new System.Drawing.Point(12, 121);
             this.buttonYes.Name = "buttonYes";
             this.buttonYes.Size = new System.Drawing.Size(75, 23);
             this.buttonYes.TabIndex = 1;
@@ -61,7 +61,7 @@
             // buttonNo
             // 
             this.buttonNo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonNo.Location = new System.Drawing.Point(169, 80);
+            this.buttonNo.Location = new System.Drawing.Point(141, 121);
             this.buttonNo.Name = "buttonNo";
             this.buttonNo.Size = new System.Drawing.Size(75, 23);
             this.buttonNo.TabIndex = 2;
@@ -74,7 +74,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(256, 115);
+            this.BackgroundImage = global::Monopol.Properties.Resources.ram;
+            this.ClientSize = new System.Drawing.Size(228, 156);
             this.Controls.Add(this.buttonNo);
             this.Controls.Add(this.buttonYes);
             this.Controls.Add(this.richTextBox1);

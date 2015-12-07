@@ -17,22 +17,27 @@ namespace Monopol
         {
             player.AllowPlayerToBuyProperty(false);
             Debug.WriteLine("Plats: " + game.board[player.position].name + ", " + PositionType(player, game).ToString());
+            
             if (player.cash < 0)
             {
                 kickPlayer(player);
             }
+
             if (PositionType(player, game) == Spaces.GoToJail)
             {
                 game.BustPlayer(player);
             }
+
             else if (PositionType(player, game) == Spaces.AvailableProperty)
             {
                 player.AllowPlayerToBuyProperty(game.board[player.position] as Property);
             }
+
             else if (PositionType(player, game) == Spaces.OwnedProperty)
             {
                 player.PayOpponent(game.findPlayer((game.board[player.position] as Property).owner), (game.board[player.position] as Property).rent);
             }
+
             else if (PositionType(player, game) == Spaces.Bisys)
             {
                 game.newBisys();

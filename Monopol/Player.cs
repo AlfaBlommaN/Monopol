@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace Monopol
         private bool allowedBuy = false;
         private Property tmpProp;
         public string icon = "";
+        public Color color;
 
         public Player(string name, int cash = 15000, int position = 0)
         {
@@ -59,10 +61,14 @@ namespace Monopol
         /// <param name="steps">Antal steg som spelaren skall gå</param>
         public void Go(int steps)
         {
+
             if (position + steps < 40)
                 position = position + steps;
             else
+            {
                 position = position + steps - 40;
+                cash += 5000;
+            }
             Debug.WriteLine("Position: " + position);
         }
 

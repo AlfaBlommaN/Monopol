@@ -15,6 +15,7 @@ namespace Monopol
         public DialogForm(string text)
         {
             InitializeComponent();
+            richTextBox1.SelectionAlignment = HorizontalAlignment.Center;
             richTextBox1.Text = text;
             this.ActiveControl = buttonYes;
         }
@@ -22,6 +23,7 @@ namespace Monopol
         public DialogForm(string text, bool ok)
         {
             InitializeComponent();
+            richTextBox1.SelectionAlignment = HorizontalAlignment.Center;
             richTextBox1.Text = text;
             buttonNo.Hide();
             buttonYes.Text = "OK";

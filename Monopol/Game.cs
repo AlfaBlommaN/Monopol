@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,14 +11,13 @@ namespace Monopol
 {
     public class Game
     {
-
+        private Color[] colors = new Color[] {Color.Blue, Color.Red, Color.Purple, Color.Orange, Color.DarkGreen, Color.Black};
         const int jailpos = 10;
         private int playerturn = 0;
         public List<Player> players = new List<Player>(6);
         public int[] lastThrow { get; private set; }
 
         public Space[] board = new Space[40];
-        XDocument xdoc = new XDocument(new XElement("Root"));
 
         public Bisyssla currentBisys = new Bisyssla("", 0);
         private List<Bisyssla> bisysslor = new List<Bisyssla>();
@@ -37,26 +37,58 @@ namespace Monopol
 
         public void board_init(ref Space[] board)
         {
-            for (uint i = 0; i < board.Length; ++i)
-            {
-                if (i == 0)
-                    board[i] = new Space("Gå");
-                else if (i == jailpos)
-                    board[i] = new Space("Granntant Åsa");
-                else if (i == 20)
-                    board[i] = new Space("Fri Parkering");
-                else if (i == 30)
-                    board[i] = new GoToJail();
-                else if (i == 2 || i == 17 || i == 33 || i == 7 || i == 22 || i == 36 || i == 38 || i == 16)
-                    board[i] = new BisysSpace();
-                else board[i] = new Property("Testgatan " + i.ToString(), 3000);
-            }
+            board[0] = new Space("Gå");
+            board[1] = new Property("SU00", 1000);
+            board[2] = new Property("SU01", 1001);
+            board[3] = new Property("SU02", 1002);
+            board[4] = new Property("SU03", 1003);
+            board[5] = new BisysSpace();
+            board[6] = new Property("Skäggetorp", 2000);
+            board[7] = new BisysSpace();
+            board[8] = new Property("Valla", 2000);
+            board[9] = new Property("Ryd", 2000);
+            board[10] = new Space("Granntant Åsa");
 
-            for (int i = 0; i < 15; i++)
-            {
-                Random rnd = new Random();
-                bisysslor.Add(new Bisyssla("Testmeddelande " + i.ToString(), rnd.Next(-4000, 0)));
-            }
+            board[11] = new Property("Spinkiga Stures Sportbar", 4000);
+            board[12] = new Property("Joddlande Jörgens Jazzklubb", 2500);
+            board[13] = new Property("Panka Pekkas Pantbank", 2500);
+            board[14] = new Property("Girige Görans Gym", 4000);
+            board[15] = new BisysSpace();
+            board[16] = new Property("Rådans Järnvägsspår", 2500);
+            board[17] = new BisysSpace();
+            board[18] = new Property("De vises kotte", 5);
+            board[19] = new Property("Rådans vasbutik", 6000);
+            board[20] = new Space("Akademisk kvart");
+
+            board[21] = new Property("Ågatan", 4500);
+            board[22] = new Property("Kinda kanal", 5000);
+            board[23] = new Property("Lennarts Möbler AB", 4900);
+            board[24] = new Property("Axels Tempel", 4000);
+            board[25] = new BisysSpace();
+            board[26] = new Property("Lambohov", 6000);
+            board[27] = new BisysSpace();
+            board[28] = new Property("Mor Perbergs Svartklubb", 5000);
+            board[29] = new Property("Tandläkare Tures Turistbyrå", 3000);
+            board[30] = new GoToJail();
+
+            board[31] = new Property("Professorns kontor", 5000);
+            board[32] = new Property("Professorns bibliotek", 7000);
+            board[33] = new Property("G-huset", 3000);
+            board[34] = new Property("Professorns datorrum", 6000);
+            board[35] = new BisysSpace();
+            board[36] = new Property("Tant Agdas Konditori", 12000);
+            board[37] = new Property("Tant Agdas Vinkällare", 17000);
+            board[38] = new BisysSpace();
+            board[39] = new Property("Tant Agdas Prinsesstårta", 25000);
+
+            bisysslor.Add(new Bisyssla("tappar sina tänder och slipper köpa tandvårdsprodukter.", 5000));
+            bisysslor.Add(new Bisyssla("upptäcker spelet Professorn utan bisysslor och behöver aldrig köpa ett spel igen.", 10000));
+            bisysslor.Add(new Bisyssla("har börjat läsa böcker, och köpte Henning Mankells Mordet i diskmatten som är väldigt dyr.", -2000));
+            bisysslor.Add(new Bisyssla("har köpt en speldator för att spela sin nya bisyssla, Professorn utan bisysslor", -500));
+            bisysslor.Add(new Bisyssla("har köpt en ny BMW Z4", -8000));
+            bisysslor.Add(new Bisyssla("sparar pengar genom att köpa en falsk tågbiljett av Rådan", 1000));
+            bisysslor.Add(new Bisyssla("attackeras av aggresiva radiotjänstarbetare.", -2216));
+            bisysslor.Add(new Bisyssla("köper en pizza.", -200));
 
         }
 
@@ -89,8 +121,12 @@ namespace Monopol
 
         public void addPlayer(string name)
         {
-            this.players.Add(new Player(name));
-            Debug.WriteLine(players.Count() + ": " + name);
+            if (players.Count() < 6)
+            {
+                this.players.Add(new Player(name));
+                players.Last().color = colors[players.Count - 1];
+                Debug.WriteLine(players.Count() + ": " + name);
+            }
         }
 
         public void BustPlayer(Player player)
@@ -129,6 +165,7 @@ namespace Monopol
 
         public void Save()
         {
+            XDocument xdoc = new XDocument(new XElement("Root"));
 
             XElement playersState = new XElement("Players",
 
