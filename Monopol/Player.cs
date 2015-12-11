@@ -21,6 +21,8 @@ namespace Monopol
         public string icon = "";
         public Color color;
 
+        public Queue<BuySellQuery> pendingQueries = new Queue<BuySellQuery>();
+
         public Player(string name, int cash = 15000, int position = 0)
         {
             this.name = name;
@@ -54,6 +56,12 @@ namespace Monopol
             }
         }
 
+        public void GetOutOfJail()
+        {
+            this.prisoner = false;
+            this.cash -= 2000;
+        }
+
 
         /// <summary>
         /// Låt spelaren traversa över spelplanen
@@ -61,15 +69,17 @@ namespace Monopol
         /// <param name="steps">Antal steg som spelaren skall gå</param>
         public void Go(int steps)
         {
-
-            if (position + steps < 40)
-                position = position + steps;
-            else
+            if (!this.prisoner)
             {
-                position = position + steps - 40;
-                cash += 5000;
+                if (position + steps < 40)
+                    position = position + steps;
+                else
+                {
+                    position = position + steps - 40;
+                    cash += 5000;
+                }
+                Debug.WriteLine("Position: " + position);
             }
-            Debug.WriteLine("Position: " + position);
         }
 
         public void GoTo(int position)
@@ -77,5 +87,43 @@ namespace Monopol
             this.position = position;
         }
 
+
+        public void AddQuery(BuySellQuery query)
+        {
+            pendingQueries.Enqueue(query);
+        }
+
+        public bool AcceptQuery(BuySellQuery query, Game g)
+        {
+
+            // Om spelaren som skickar queryn säljer och den som tar emot köper
+            if (query.type == BuyOrSell.Sell)
+            {
+                if (cash < query.offer)
+                    return false;
+                Space prop = (from p in g.board
+                                where p.GetType() == typeof(Property)
+                                && p.name == query.property
+                                select p).Single();
+
+                cash -= query.offer;
+                g.findPlayer(query.sender).cash += query.offer;
+                ((Property)prop).owner = this.name;
+            }
+
+            // Om spelaren som skickar queryn vill köpa och den som tar emot säljer
+            if (query.type == BuyOrSell.Buy)
+            {
+                Space prop = (from p in g.board
+                              where p.GetType() == typeof(Property)
+                              && p.name == query.property
+                              select p).Single();
+
+                cash += query.offer;
+                g.findPlayer(query.sender).cash -= query.offer;
+                ((Property)prop).owner = query.sender;
+            }
+            return true;
+        }
     }
 }

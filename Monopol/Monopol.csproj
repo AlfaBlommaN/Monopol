@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bisyssla.cs" />
+    <Compile Include="BuySellQuery.cs" />
     <Compile Include="DialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,6 +128,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ram.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\Bisysslor.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Board.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

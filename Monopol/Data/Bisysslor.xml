@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+  <!--Ändringar i spelbrädet-->
+  <Bisysslor>
+    <Bisyssla Message="tappar sina tänder och slipper köpa tandvårdsprodukter." Value="5000" />
+    <Bisyssla Message="upptäcker spelet Professorn utan bisysslor och behöver aldrig köpa ett spel igen." Value="10000" />
+    <Bisyssla Message="har börjat läsa böcker, och köpte Henning Mankells Mordet i diskmatten som är väldigt dyr." Value="-2000" />
+    <Bisyssla Message="har köpt en speldator för att spela sin nya bisyssla, Professorn utan bisysslor" Value="-500" />
+    <Bisyssla Message="har köpt en ny BMW Z4" Value="-8000" />
+    <Bisyssla Message="sparar pengar genom att köpa en falsk tågbiljett av Rådan" Value="1000" />
+    <Bisyssla Message="attackeras av aggresiva radiotjänstarbetare." Value="-2216" />
+    <Bisyssla Message="köper en pizza." Value="-200" />
+    <Bisyssla Message="säljer sina möbler till Lennarts Möbler AB för ett kanonpris." Value="3000" />
+    <Bisyssla Message="åker ditt för snatteri i Tant Agdas Konditori, tvingas betala böter." Value="-1500" />
+    <Bisyssla Message="har laddat ner piratkopierat material. Henrik Pontén gör razzia i din lägenhet och måste mutas så han inte skvallrar." Value="-10000" />
+    <Bisyssla Message="har börjat spela gitarr och måste handla plektrum" Value="-5" />
+    <Bisyssla Message="har börjat plugga och måste ha energi för Pintos, köper MASSA energidrycker" Value="-6000" />
+    <Bisyssla Message="klarade 30hp och får nu CSN bidrag." Value="15000" />
+  </Bisysslor>

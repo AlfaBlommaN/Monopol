@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Board>
+  <Property Name="SU00" Position="1" Cost="1000" />
+  <Property Name="SU01" Position="2" Cost="1001" />
+  <Property Name="SU02" Position="3" Cost="1002" />
+  <Property Name="SU03" Position="4" Cost="1003" />
+  <Property Name="Skäggetorp" Position="6" Cost="2000" />
+  <Property Name="Valla" Position="8" Cost="2000" />
+  <Property Name="Ryd" Position="9" Cost="2000" />
+  <Property Name="Spinkiga Stures Sportbar" Position="11" Cost="4000" />
+  <Property Name="Joddlande Jörgens Jazzklubb" Position="12" Cost="2500" />
+  <Property Name="Panka Pekkas Pantbank" Position="13" Cost="2500" />
+  <Property Name="Girige Görans Gym" Position="14" Cost="4000" />
+  <Property Name="Rådans Järnvägsspår" Position="16" Cost="2500" />
+  <Property Name="De vises kotte" Position="18" Cost="5" />
+  <Property Name="Rådans vasbutik" Position="19" Cost="6000" />
+  <Property Name="Ågatan" Position="21" Cost="4500" />
+  <Property Name="Kinda kanal" Position="22" Cost="5000" />
+  <Property Name="Lennarts Möbler AB" Position="23" Cost="4900" />
+  <Property Name="Axels Tempel" Position="24" Cost="4000" />
+  <Property Name="Lambohov" Position="26" Cost="6000" />
+  <Property Name="Mor Perbergs Svartklubb" Position="28" Cost="5000" />
+  <Property Name="Tandläkare Tures Turistbyrå" Position="29" Cost="3000" />
+  <Property Name="Professorns kontor" Position="31" Cost="5000" />
+  <Property Name="Professorns bibliotek" Position="32" Cost="7000" />
+  <Property Name="G-huset" Position="33" Cost="3000" />
+  <Property Name="Professorns datorrum" Position="34" Cost="6000" />
+  <Property Name="Tant Agdas Konditori" Position="36" Cost="12000" />
+  <Property Name="Tant Agdas Vinkällare" Position="37" Cost="17000" />
+  <Property Name="Tant Agdas Prinsesstårta" Position="39" Cost="25000" />
+  <Bisysspace Position="5" />
+  <Bisysspace Position="7" />
+  <Bisysspace Position="15" />
+  <Bisysspace Position="17" />
+  <Bisysspace Position="25" />
+  <Bisysspace Position="27" />
+  <Bisysspace Position="35" />
+  <Bisysspace Position="38" />
+  <Space Position="0" Name="Gå" />
+  <Space Position="10" Name="Granntant Åsa" />
+  <Space Position="20" Name="Akademisk kvart" />
+  <GoToJail Position="30" />
+</Board>

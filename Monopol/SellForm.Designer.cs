@@ -122,6 +122,7 @@
             this.Controls.Add(this.listBoxProperty);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "SellForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Sälja egendom";
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -8,7 +8,7 @@ namespace Monopol
 {
     public class BisysSpace : Space
     {
-
+       public BisysSpace(int position_):base(position_) { }
     }
 
     public class Bisyssla

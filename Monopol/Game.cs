@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Xml.Linq;
 
 namespace Monopol
 {
+    public enum BuyOrSell { Buy, Sell } 
     public class Game
     {
         private Color[] colors = new Color[] {Color.Blue, Color.Red, Color.Purple, Color.Orange, Color.DarkGreen, Color.Black};
@@ -23,6 +25,7 @@ namespace Monopol
         private List<Bisyssla> bisysslor = new List<Bisyssla>();
 
 
+
         private void NextTurn()
         {
             if (playerturn >= players.Count() - 1)
@@ -35,62 +38,6 @@ namespace Monopol
         }
 
 
-        public void board_init(ref Space[] board)
-        {
-            board[0] = new Space("Gå");
-            board[1] = new Property("SU00", 1000);
-            board[2] = new Property("SU01", 1001);
-            board[3] = new Property("SU02", 1002);
-            board[4] = new Property("SU03", 1003);
-            board[5] = new BisysSpace();
-            board[6] = new Property("Skäggetorp", 2000);
-            board[7] = new BisysSpace();
-            board[8] = new Property("Valla", 2000);
-            board[9] = new Property("Ryd", 2000);
-            board[10] = new Space("Granntant Åsa");
-
-            board[11] = new Property("Spinkiga Stures Sportbar", 4000);
-            board[12] = new Property("Joddlande Jörgens Jazzklubb", 2500);
-            board[13] = new Property("Panka Pekkas Pantbank", 2500);
-            board[14] = new Property("Girige Görans Gym", 4000);
-            board[15] = new BisysSpace();
-            board[16] = new Property("Rådans Järnvägsspår", 2500);
-            board[17] = new BisysSpace();
-            board[18] = new Property("De vises kotte", 5);
-            board[19] = new Property("Rådans vasbutik", 6000);
-            board[20] = new Space("Akademisk kvart");
-
-            board[21] = new Property("Ågatan", 4500);
-            board[22] = new Property("Kinda kanal", 5000);
-            board[23] = new Property("Lennarts Möbler AB", 4900);
-            board[24] = new Property("Axels Tempel", 4000);
-            board[25] = new BisysSpace();
-            board[26] = new Property("Lambohov", 6000);
-            board[27] = new BisysSpace();
-            board[28] = new Property("Mor Perbergs Svartklubb", 5000);
-            board[29] = new Property("Tandläkare Tures Turistbyrå", 3000);
-            board[30] = new GoToJail();
-
-            board[31] = new Property("Professorns kontor", 5000);
-            board[32] = new Property("Professorns bibliotek", 7000);
-            board[33] = new Property("G-huset", 3000);
-            board[34] = new Property("Professorns datorrum", 6000);
-            board[35] = new BisysSpace();
-            board[36] = new Property("Tant Agdas Konditori", 12000);
-            board[37] = new Property("Tant Agdas Vinkällare", 17000);
-            board[38] = new BisysSpace();
-            board[39] = new Property("Tant Agdas Prinsesstårta", 25000);
-
-            bisysslor.Add(new Bisyssla("tappar sina tänder och slipper köpa tandvårdsprodukter.", 5000));
-            bisysslor.Add(new Bisyssla("upptäcker spelet Professorn utan bisysslor och behöver aldrig köpa ett spel igen.", 10000));
-            bisysslor.Add(new Bisyssla("har börjat läsa böcker, och köpte Henning Mankells Mordet i diskmatten som är väldigt dyr.", -2000));
-            bisysslor.Add(new Bisyssla("har köpt en speldator för att spela sin nya bisyssla, Professorn utan bisysslor", -500));
-            bisysslor.Add(new Bisyssla("har köpt en ny BMW Z4", -8000));
-            bisysslor.Add(new Bisyssla("sparar pengar genom att köpa en falsk tågbiljett av Rådan", 1000));
-            bisysslor.Add(new Bisyssla("attackeras av aggresiva radiotjänstarbetare.", -2216));
-            bisysslor.Add(new Bisyssla("köper en pizza.", -200));
-
-        }
 
         public int[] throw_dice()
         {
@@ -105,7 +52,6 @@ namespace Monopol
             Debug.WriteLine("Tärning: " + (dices[0] + dices[1]).ToString());
             Rules.CheckState(players[playerturn], this);
             lastThrow = dices;
-            Save();
             return dices;
         }
 
@@ -125,6 +71,18 @@ namespace Monopol
             {
                 this.players.Add(new Player(name));
                 players.Last().color = colors[players.Count - 1];
+                Debug.WriteLine(players.Count() + ": " + name);
+            }
+        }
+
+        public void addPlayer(string name, int cash, int position, bool prisoner)
+        {
+            if (players.Count() < 6)
+            {
+                this.players.Add(new Player(name, cash, position));
+                players.Last().color = colors[players.Count - 1];
+                players.Last().prisoner = prisoner;
+
                 Debug.WriteLine(players.Count() + ": " + name);
             }
         }
@@ -163,8 +121,14 @@ namespace Monopol
             currentBisys = new Bisyssla("", 0);
         }
 
-        public void Save()
+        public void SendQueryToPlayer(string name, BuySellQuery query)
         {
+            findPlayer(name).AddQuery(query);
+        }
+
+        public void Save(FileSystemWatcher watcher)
+        {
+            watcher.EnableRaisingEvents = false;
             XDocument xdoc = new XDocument(new XElement("Root"));
 
             XElement playersState = new XElement("Players",
@@ -176,7 +140,7 @@ namespace Monopol
                 new XAttribute("Cash", player.cash),
                 new XAttribute("Prisoner", player.prisoner),
                 new XAttribute("Position", player.position),
-                new XAttribute("Icon", player.icon)));
+                new XAttribute("Color", player.color)));
 
             XElement boardState = new XElement("Board",
 
@@ -190,7 +154,83 @@ namespace Monopol
 
             xdoc.Root.Add(new XComment("Information om spelarna"), playersState); 
             xdoc.Root.Add(new XComment("Ändringar i spelbrädet"), boardState);
-            xdoc.Save("State.xml");
+            xdoc.Save("Data/State.xml");
+            watcher.EnableRaisingEvents = true;
+        }
+
+        public void LoadState()
+        {
+            var playerState = from members in XDocument.Load("Data/State.xml").Root.Elements().Descendants("Player")
+                              select members;
+
+            var propertyState = from members in XDocument.Load("Data/State.xml").Root.Elements().Descendants("Property")
+                              select members;
+
+            players = new List<Player>();
+
+            foreach (var player in playerState)
+            {
+                addPlayer(player.Attribute("Name").Value, Int32.Parse(player.Attribute("Cash").Value), Int32.Parse(player.Attribute("Position").Value), Boolean.Parse(player.Attribute("Prisoner").Value));
+                Debug.WriteLine("Player: " + player);
+            }
+            
+            
+            foreach (Space p in board)
+            {
+                
+                if (p is Property)
+                {
+                    ((Property)p).owner = "";
+                    foreach (var x in propertyState)
+                    {
+                        if (((Property)p).name == x.Attribute("Name").Value)
+                            ((Property)p).owner = x.Attribute("Owner").Value;
+                    }
+                }
+
+            }
+            foreach (var prop in propertyState)
+                Debug.WriteLine("Prop: " + prop);
+        }
+
+        public void LoadInitData()
+        {
+            var newSpaces = from members in XElement.Load("Data/Board.xml").Elements()
+                            select members;
+            var newBisys = from members in XElement.Load("Data/Bisysslor.xml").Elements()
+                           select members;
+
+            foreach (XElement x in newSpaces)
+            {
+                int position = Int32.Parse(x.Attribute("Position").Value);
+
+                Debug.WriteLine("Space: " + x);
+                switch (x.Name.ToString())
+                {
+                    case "Space":
+                        string spacename = x.Attribute("Name").Value;
+                        board[position] = new Space(position, spacename);
+                        break;
+                    case "Bisysspace":
+                        board[position] = new BisysSpace(position);
+                        break;
+                    case "GoToJail":
+                        board[position] = new GoToJail(position);
+                        break;
+                    case "Property":
+                        string propname = x.Attribute("Name").Value;
+                        int cost = Int32.Parse(x.Attribute("Cost").Value);
+                        board[position] = new Property(position, propname, cost);
+                        break;
+                }
+
+            }
+            foreach (XElement x in newBisys)
+            {
+                bisysslor.Add(new Bisyssla(x.Attribute("Message").Value, Int32.Parse(x.Attribute("Value").Value)));
+            }
+
+
         }
 
     }

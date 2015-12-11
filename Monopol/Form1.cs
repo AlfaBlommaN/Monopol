@@ -11,12 +11,15 @@ using System.Windows.Forms;
 using System.Windows;
 using System.Drawing.Drawing2D;
 using System.Threading;
+using System.IO;
 
 namespace Monopol
 {
     public partial class Form1 : Form
     {
-        List<Bitmap> icons = new List<Bitmap>();
+        FileSystemWatcher watcher = new FileSystemWatcher("Data\\", "*.xml");
+
+        Bitmap icon = new Bitmap(global::Monopol.Properties.Resources.west, 30, 30);
 
         Game game = new Game();
         Graphics graphics;
@@ -32,13 +35,31 @@ namespace Monopol
             throwDice();
         }
 
+
         private void throwDice()
         {
             toolStripButton2.Enabled = true;
             game.throw_dice();
             DisplayMessage(game.GetCurrPlayer().name + " slår " + game.lastThrow.Sum());
-            
+
             UpdateGraphics();
+
+            while (game.GetCurrPlayer().pendingQueries.Count > 0)
+            {
+                BuySellQuery query = game.GetCurrPlayer().pendingQueries.Dequeue();
+                Debug.WriteLine("KÖ! " + query.property);
+                if (query.type == BuyOrSell.Sell)
+                {
+                    if (DisplayDialog("Vill du köpa " + query.property + " av " + query.sender + " för " + query.offer + "?"))
+                    {
+                        if (game.GetCurrPlayer().AcceptQuery(query, game))
+                            UpdateGraphics();
+                        else
+                            DisplayMessage("Du har inte råd.");
+                    }
+                }
+            }
+
             if (game.getCurrSpace().GetType() == typeof(Property))
             {
                 Property p = (Property)game.getCurrSpace();
@@ -56,7 +77,6 @@ namespace Monopol
                 {
                     DisplayMessage(game.GetCurrPlayer().name + " hyr " + game.getCurrSpace().name + " och betalar " + p.rent.ToString() + " kr i hyra till " + p.owner);
                 }
-
             }
 
             if (game.currentBisys.message != "")
@@ -68,18 +88,28 @@ namespace Monopol
                 game.resetBisys();
             }
 
+            if (game.GetCurrPlayer().prisoner)
+            {
+                if (DisplayDialog(game.GetCurrPlayer().name + " är och har en väldigt mysig fika hos Granntant Åsa, men plöstsligt så välter du hennes whiskeyskåp och hon blir skogstokig! Du måste betala 2000 kr."))
+                    game.GetCurrPlayer().GetOutOfJail();
+            }
+
+            if (!game.GetCurrPlayer().active)
+            {
+                DisplayMessage(game.GetCurrPlayer().name + " har gått i pension och är inte längre med i spelet.");
+            }
+
+            UpdateGraphics();
             updateStats();
             if (game.checkIfGameOver())
             {
                 DisplayMessage("Spelet är över!");
                 endGame();
             }
+
+            game.Save(watcher);
         }
 
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
@@ -87,10 +117,13 @@ namespace Monopol
             {
                 sellForm.ShowDialog(this);
             }
+            toolStripButton2.Enabled = false;
         }
 
         private void updateStats()
         {
+            Control.CheckForIllegalCrossThreadCalls = false;
+
             statsTextBox.Text = "";
             foreach (Player p in game.players)
             {
@@ -110,6 +143,7 @@ namespace Monopol
 
             }
 
+            Control.CheckForIllegalCrossThreadCalls = true;
         }
 
 
@@ -140,10 +174,39 @@ namespace Monopol
                         gfxPos = new Point(10 + (i * 2), 660 - ((game.players[i].position - 29) * 57 + (i * 2)));
 
                     graphics.FillEllipse(new SolidBrush(game.players[i].color), new Rectangle(new Point(gfxPos.X - 3, gfxPos.Y - 3), new Size(35, 35)));
-                    graphics.DrawImage(icons[i], gfxPos);
+                    graphics.DrawImage(icon, gfxPos);
+                    DrawOwnerRectangle(game.players[i]);
                 }
             }
         }
+
+        private void DrawOwnerRectangle(Player p)
+        {
+            List<int> indexes = new List<int>();
+            for (int i = 0; i < game.board.Count(); ++i)
+            {
+                if (game.board[i].GetType() == typeof(Property) && ((Property)game.board[i]).owner == p.name)
+                {
+                    indexes.Add(i - 1);
+                }
+            }
+
+            foreach (int i in indexes)
+            {
+                Rectangle r = new Rectangle(0, 0, 0, 0);
+                if (i < 10)
+                    r = new Rectangle(new Point(86 + (i * 57), 0), new Size(57, 85));
+                else if (i >= 10 && i < 20)
+                    r = new Rectangle(new Point(599, (i - 10) * 57 + 85), new Size(85, 57));
+                else if (i >= 20 && i < 30)
+                    r = new Rectangle(new Point(599 - ((i - 19) * 57), 598), new Size(57, 85));
+                else if (i >= 30)
+                    r = new Rectangle(new Point(0, 598 - ((i - 29) * 57)), new Size(85, 57));
+
+                graphics.DrawRectangle(new Pen(p.color, 3), r);
+            }
+        }
+
 
         private void ResposeButton_Click(object sender, EventArgs e)
         {
@@ -199,16 +262,30 @@ namespace Monopol
         {
             Menu menu = new Menu(ref game);
             menu.StartPosition = FormStartPosition.CenterParent;
-            if (!(menu.ShowDialog(this) == DialogResult.Yes))
+            var result = menu.ShowDialog(this);
+            if (result == DialogResult.Yes)
+                game.LoadInitData();
+            else if (result == DialogResult.OK)
+            {
+                game.LoadInitData();
+                game.LoadState();
+            }
+            else
                 Application.Exit();
 
-            game.board_init(ref game.board);
-            foreach (Player p in game.players)
-            {
-                icons.Add(new Bitmap(global::Monopol.Properties.Resources.west, 30, 30));
-            }
             updateStats();
             UpdateGraphics();
+
+            watcher.Changed += new FileSystemEventHandler(WatcherChanged);
+            watcher.EnableRaisingEvents = true;
+        }
+
+        private void WatcherChanged(object sender, System.IO.FileSystemEventArgs e)
+        {
+            game.LoadState();
+            UpdateGraphics();
+            updateStats();
+            DisplayMessage("Filer har ändrats! Spelet har uppdaterats till senaste version");
         }
 
 

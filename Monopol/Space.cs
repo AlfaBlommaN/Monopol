@@ -8,14 +8,21 @@ namespace Monopol
 {
    public class Space
     {
-
+       public int position;
        public Space() { }
  
-       public Space (string name_)
+       public Space (int position_, string name_)
         {
             name = name_;
+            position = position_;
         }
+
+       public Space(int position_)
+       {
+           this.position = position_;
+       }
         public string name;
+        private int position_;
               
     }
 
@@ -26,7 +33,8 @@ namespace Monopol
 
         public int rent;
 
-        public Property (string name_, int cost_) : base(name_)
+        public Property(int position_, string name_, int cost_)
+            : base(position_, name_)
         {
             owner = "";
             cost = cost_;
@@ -36,12 +44,8 @@ namespace Monopol
     }
     public class GoToJail : Space
     {
-
+        public GoToJail(int position_):base(position_) { }
     }
     
-    public class Bisys : Space
-    {
-        
-    }
 
 }

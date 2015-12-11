@@ -12,9 +12,13 @@ namespace Monopol
 {
     public partial class SellForm : Form
     {
-        public SellForm(ref Game game)
+        
+
+        Game game;
+        public SellForm(ref Game game_)
         {
             InitializeComponent();
+            this.game = game_;
             foreach (Player player in game.players)
             {
                 if (player.name != game.GetCurrPlayer().name)
@@ -39,11 +43,11 @@ namespace Monopol
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (textBoxPrice.Text.All(char.IsDigit))
-                ;
-            else
-                MessageBox.Show("Ange ett heltal, kompis!");
-
+            if (textBoxPrice.Text.All(char.IsDigit) && textBoxPrice.Text != "" && listBoxPlayers.SelectedIndex > -1 && listBoxProperty.SelectedIndex > -1)
+            {
+                game.findPlayer(listBoxPlayers.SelectedItem.ToString()).AddQuery(new BuySellQuery(game.GetCurrPlayer().name, BuyOrSell.Sell, Int32.Parse(textBoxPrice.Text), listBoxProperty.Text));
+                this.Close();
+            }
 
         }
     }

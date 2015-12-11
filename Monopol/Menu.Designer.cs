@@ -32,11 +32,12 @@
             this.textBoxPlayerName = new System.Windows.Forms.TextBox();
             this.labelPlayerName = new System.Windows.Forms.Label();
             this.buttonStartGame = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonAddPlayer
             // 
-            this.buttonAddPlayer.Location = new System.Drawing.Point(31, 80);
+            this.buttonAddPlayer.Location = new System.Drawing.Point(31, 51);
             this.buttonAddPlayer.Name = "buttonAddPlayer";
             this.buttonAddPlayer.Size = new System.Drawing.Size(119, 23);
             this.buttonAddPlayer.TabIndex = 0;
@@ -46,7 +47,7 @@
             // 
             // textBoxPlayerName
             // 
-            this.textBoxPlayerName.Location = new System.Drawing.Point(31, 54);
+            this.textBoxPlayerName.Location = new System.Drawing.Point(31, 25);
             this.textBoxPlayerName.Name = "textBoxPlayerName";
             this.textBoxPlayerName.Size = new System.Drawing.Size(119, 20);
             this.textBoxPlayerName.TabIndex = 1;
@@ -55,7 +56,7 @@
             // labelPlayerName
             // 
             this.labelPlayerName.AutoSize = true;
-            this.labelPlayerName.Location = new System.Drawing.Point(28, 38);
+            this.labelPlayerName.Location = new System.Drawing.Point(28, 9);
             this.labelPlayerName.Name = "labelPlayerName";
             this.labelPlayerName.Size = new System.Drawing.Size(69, 13);
             this.labelPlayerName.TabIndex = 2;
@@ -63,7 +64,7 @@
             // 
             // buttonStartGame
             // 
-            this.buttonStartGame.Location = new System.Drawing.Point(56, 109);
+            this.buttonStartGame.Location = new System.Drawing.Point(52, 80);
             this.buttonStartGame.Name = "buttonStartGame";
             this.buttonStartGame.Size = new System.Drawing.Size(75, 23);
             this.buttonStartGame.TabIndex = 3;
@@ -71,11 +72,22 @@
             this.buttonStartGame.UseVisualStyleBackColor = true;
             this.buttonStartGame.Click += new System.EventHandler(this.buttonStartGame_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(31, 109);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(119, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "Ladda tidigare spel";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(177, 164);
+            this.ClientSize = new System.Drawing.Size(177, 144);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.textBoxPlayerName);
             this.Controls.Add(this.buttonAddPlayer);
             this.Controls.Add(this.buttonStartGame);
@@ -94,5 +106,6 @@
         private System.Windows.Forms.TextBox textBoxPlayerName;
         private System.Windows.Forms.Label labelPlayerName;
         private System.Windows.Forms.Button buttonStartGame;
+        private System.Windows.Forms.Button button1;
     }
 }
