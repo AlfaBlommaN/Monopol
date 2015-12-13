@@ -36,7 +36,7 @@ namespace Monopol
         private void addPlayer()
         {
             if (textBoxPlayerName.Text != "" && textBoxPlayerName.Text.Count() < 20)
-                game.addPlayer(textBoxPlayerName.Text);
+                game.addPlayer(AIcheckBox.Checked, textBoxPlayerName.Text);
             else
                 MessageBox.Show("Ange ett namn, kompis!");
 

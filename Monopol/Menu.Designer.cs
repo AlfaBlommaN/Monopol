@@ -33,6 +33,7 @@
             this.labelPlayerName = new System.Windows.Forms.Label();
             this.buttonStartGame = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.AIcheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // buttonAddPlayer
@@ -64,7 +65,7 @@
             // 
             // buttonStartGame
             // 
-            this.buttonStartGame.Location = new System.Drawing.Point(52, 80);
+            this.buttonStartGame.Location = new System.Drawing.Point(55, 80);
             this.buttonStartGame.Name = "buttonStartGame";
             this.buttonStartGame.Size = new System.Drawing.Size(75, 23);
             this.buttonStartGame.TabIndex = 3;
@@ -82,11 +83,22 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // AIcheckBox
+            // 
+            this.AIcheckBox.AutoSize = true;
+            this.AIcheckBox.Location = new System.Drawing.Point(156, 28);
+            this.AIcheckBox.Name = "AIcheckBox";
+            this.AIcheckBox.Size = new System.Drawing.Size(36, 17);
+            this.AIcheckBox.TabIndex = 5;
+            this.AIcheckBox.Text = "AI";
+            this.AIcheckBox.UseVisualStyleBackColor = true;
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(177, 144);
+            this.ClientSize = new System.Drawing.Size(199, 144);
+            this.Controls.Add(this.AIcheckBox);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBoxPlayerName);
             this.Controls.Add(this.buttonAddPlayer);
@@ -107,5 +119,6 @@
         private System.Windows.Forms.Label labelPlayerName;
         private System.Windows.Forms.Button buttonStartGame;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox AIcheckBox;
     }
 }

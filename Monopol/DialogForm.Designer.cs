@@ -82,6 +82,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "DialogForm";
             this.Text = "DialogForm";
+            this.Shown += new System.EventHandler(this.DialogForm_Shown);
             this.ResumeLayout(false);
 
         }

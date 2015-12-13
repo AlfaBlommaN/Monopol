@@ -17,10 +17,10 @@ namespace Monopol
         {
             player.AllowPlayerToBuyProperty(false);
             Debug.WriteLine("Plats: " + game.board[player.position].name + ", " + PositionType(player, game).ToString());
-            
+
             if (player.cash < 0)
             {
-                kickPlayer(player);
+                kickPlayer(player, game);
             }
 
             if (PositionType(player, game) == Spaces.GoToJail)
@@ -47,10 +47,18 @@ namespace Monopol
 
         }
 
-        static private void kickPlayer(Player player)
+        static private void kickPlayer(Player player, Game game)
         {
             player.active = false;
             Debug.WriteLine(player.name + " har förlorat!");
+            foreach (Space s in game.board)
+            {
+                if (s is Property)
+                {
+                    if (((Property)s).owner == player.name)
+                        ((Property)s).owner = "";
+                }
+            }
         }
 
         static bool CheckIfJail(Player player, Game game)

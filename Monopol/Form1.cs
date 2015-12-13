@@ -50,7 +50,8 @@ namespace Monopol
                 Debug.WriteLine("KÖ! " + query.property);
                 if (query.type == BuyOrSell.Sell)
                 {
-                    if (DisplayDialog("Vill du köpa " + query.property + " av " + query.sender + " för " + query.offer + "?"))
+                    game.GetCurrPlayer().SetDecision(DisplayDialog("Vill du köpa " + query.property + " av " + query.sender + " för " + query.offer + "?"));
+                    if (game.GetCurrPlayer().GetDecision(query.offer))
                     {
                         if (game.GetCurrPlayer().AcceptQuery(query, game))
                             UpdateGraphics();
@@ -60,12 +61,13 @@ namespace Monopol
                 }
             }
 
-            if (game.getCurrSpace().GetType() == typeof(Property))
+            if (game.getCurrSpace() is Property)
             {
                 Property p = (Property)game.getCurrSpace();
                 if (p.owner == "")
                 {
-                    if (DisplayDialog(game.GetCurrPlayer().name + ": \n" + "Vill du köpa " + game.getCurrSpace().name + " för " + p.cost.ToString() + " kr?"))
+                    game.GetCurrPlayer().SetDecision(DisplayDialog(game.GetCurrPlayer().name + ": \n" + "Vill du köpa " + game.getCurrSpace().name + " för " + p.cost.ToString() + " kr?"));
+                    if (game.GetCurrPlayer().GetDecision(p.cost))
                     {
                         if (game.GetCurrPlayer().cash >= p.cost)
                             game.GetCurrPlayer().BuyProperty();
@@ -90,7 +92,8 @@ namespace Monopol
 
             if (game.GetCurrPlayer().prisoner)
             {
-                if (DisplayDialog(game.GetCurrPlayer().name + " är och har en väldigt mysig fika hos Granntant Åsa, men plöstsligt så välter du hennes whiskeyskåp och hon blir skogstokig! Du måste betala 2000 kr."))
+                game.GetCurrPlayer().SetDecision(DisplayDialog(game.GetCurrPlayer().name + " är och har en väldigt mysig fika hos Granntant Åsa, men plöstsligt så välter du hennes whiskeyskåp och hon blir skogstokig! Du måste betala 2000 kr."));
+                if (game.GetCurrPlayer().GetDecision(2000))
                     game.GetCurrPlayer().GetOutOfJail();
             }
 
@@ -108,6 +111,9 @@ namespace Monopol
             }
 
             game.Save(watcher);
+
+            if (game.GetCurrPlayer() is AI)
+                throwDice();
         }
 
 
@@ -215,14 +221,14 @@ namespace Monopol
 
         private bool DisplayDialog(string text)
         {
-            DialogForm dialog = new DialogForm(text);
+            DialogForm dialog = new DialogForm(text, game.GetCurrPlayer() is AI);
             dialog.StartPosition = FormStartPosition.CenterParent;
             return dialog.ShowDialog() == DialogResult.Yes;
         }
 
         private bool DisplayMessage(string text)
         {
-            DialogForm dialog = new DialogForm(text, true);
+            DialogForm dialog = new DialogForm(text, true, game.GetCurrPlayer() is AI);
             dialog.StartPosition = FormStartPosition.CenterParent;
             return dialog.ShowDialog() == DialogResult.Yes;
         }

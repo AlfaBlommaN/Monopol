@@ -65,21 +65,29 @@ namespace Monopol
             return board[GetCurrPlayer().position];
         }
 
-        public void addPlayer(string name)
+        public void addPlayer(bool isAI, string name)
         {
+            Debug.WriteLine("isAI: " + isAI);
             if (players.Count() < 6)
             {
-                this.players.Add(new Player(name));
+                if (isAI)
+                    this.players.Add(new AI(name));
+                else
+                    this.players.Add(new Player(name));
                 players.Last().color = colors[players.Count - 1];
                 Debug.WriteLine(players.Count() + ": " + name);
             }
         }
 
-        public void addPlayer(string name, int cash, int position, bool prisoner)
+        public void addPlayer(bool isAI, string name, int cash, int position, bool prisoner)
         {
+            Debug.WriteLine("isAI: " + isAI);
             if (players.Count() < 6)
             {
-                this.players.Add(new Player(name, cash, position));
+                if (isAI)
+                    this.players.Add(new AI(name, cash, position));
+                else
+                    this.players.Add(new Player(name, cash, position));
                 players.Last().color = colors[players.Count - 1];
                 players.Last().prisoner = prisoner;
 
@@ -134,13 +142,14 @@ namespace Monopol
             XElement playersState = new XElement("Players",
 
             from player in players
-            where player.active == true 
+            where player.active == true
             select new XElement("Player",
+                new XAttribute("AI", player is AI),
                 new XAttribute("Name", player.name),
                 new XAttribute("Cash", player.cash),
                 new XAttribute("Prisoner", player.prisoner),
-                new XAttribute("Position", player.position),
-                new XAttribute("Color", player.color)));
+                new XAttribute("Position", player.position)
+                ));
 
             XElement boardState = new XElement("Board",
 
@@ -170,7 +179,7 @@ namespace Monopol
 
             foreach (var player in playerState)
             {
-                addPlayer(player.Attribute("Name").Value, Int32.Parse(player.Attribute("Cash").Value), Int32.Parse(player.Attribute("Position").Value), Boolean.Parse(player.Attribute("Prisoner").Value));
+                addPlayer(Boolean.Parse(player.Attribute("AI").Value), player.Attribute("Name").Value, Int32.Parse(player.Attribute("Cash").Value), Int32.Parse(player.Attribute("Position").Value), Boolean.Parse(player.Attribute("Prisoner").Value));
                 Debug.WriteLine("Player: " + player);
             }
             

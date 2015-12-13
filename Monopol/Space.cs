@@ -22,7 +22,6 @@ namespace Monopol
            this.position = position_;
        }
         public string name;
-        private int position_;
               
     }
 

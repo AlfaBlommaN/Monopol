@@ -8,6 +8,19 @@ using System.Threading.Tasks;
 
 namespace Monopol
 {
+    public class AI : Player
+    {
+        public AI(string name, int cash = 15000, int position = 0) : base(name, cash, position) { Debug.WriteLine("SKAPAR AI"); }
+
+        public override bool GetDecision(int cost)
+        {
+            Debug.WriteLine("AI DECISION");
+            if (cost <= cash * 0.70)
+                return true;
+            else
+                return false;
+        }
+    }
     public class Player
     {
         public string name { get; private set; }
@@ -21,6 +34,8 @@ namespace Monopol
         public string icon = "";
         public Color color;
 
+        private bool decision;
+
         public Queue<BuySellQuery> pendingQueries = new Queue<BuySellQuery>();
 
         public Player(string name, int cash = 15000, int position = 0)
@@ -28,6 +43,16 @@ namespace Monopol
             this.name = name;
             this.cash = cash;
             this.position = position;
+        }
+
+        public void SetDecision(bool dec)
+        {
+            decision = dec;
+        }
+
+        public virtual bool GetDecision(int cost)
+        {
+            return decision;
         }
 
         public void AllowPlayerToBuyProperty(Property prop)
