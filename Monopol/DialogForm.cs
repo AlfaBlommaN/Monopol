@@ -52,8 +52,7 @@ namespace Monopol
             {
                 this.buttonNo.Enabled = false;
                 this.buttonYes.Enabled = false;
-                Debug.WriteLine("Hej nu ska vi vänta!");
-                await Task.Delay(50);
+                await Task.Delay(1500);
                 this.Close();
             }
         }

@@ -10,11 +10,16 @@ namespace Monopol
 {
     public class AI : Player
     {
-        public AI(string name, int cash = 15000, int position = 0) : base(name, cash, position) { Debug.WriteLine("SKAPAR AI"); }
+        public AI(string name, int cash = 15000, int position = 0) : base(name, cash, position) { Debug.Write("AI: "); }
 
+        /// <summary>
+        /// Överlagrad från Players GetDecision. Här gör AI sina beslut
+        /// </summary>
+        /// <param name="cost">Hur mycket pengar som står på spel</param>
+        /// <returns>AI:ns beslut.</returns>
         public override bool GetDecision(int cost)
         {
-            Debug.WriteLine("AI DECISION");
+            Debug.WriteLine("AI " + name + " tänker...");
             if (cost <= cash * 0.70)
                 return true;
             else
@@ -45,6 +50,12 @@ namespace Monopol
             this.position = position;
         }
 
+
+        /// <summary>
+        /// Kallas på när spelaren gör ett beslut.
+        /// Ändrar spelarens decisionvärde som hämtas av spelet i GetDecision
+        /// </summary>
+        /// <param name="dec">beslut</param>
         public void SetDecision(bool dec)
         {
             decision = dec;
@@ -60,6 +71,12 @@ namespace Monopol
             tmpProp = prop;
             allowedBuy = true;
         }
+
+        /// <summary>
+        /// Låter spelaren betala till en annan spelare
+        /// </summary>
+        /// <param name="opponent">Spelare som skall ta emot pengar</param>
+        /// <param name="money">Hur mycket pengar som skall betalas</param>
         public void PayOpponent(Player opponent, int money)
         {
             Debug.WriteLine(this.name + " betalar " + money.ToString() + " kr till " + opponent.name);
@@ -87,7 +104,6 @@ namespace Monopol
             this.cash -= 2000;
         }
 
-
         /// <summary>
         /// Låt spelaren traversa över spelplanen
         /// </summary>
@@ -113,11 +129,21 @@ namespace Monopol
         }
 
 
+        /// <summary>
+        /// Lägger till en förfrågan i spelarens kö
+        /// </summary>
+        /// <param name="query">Förfrågan som skall skickas</param>
         public void AddQuery(BuySellQuery query)
         {
             pendingQueries.Enqueue(query);
         }
 
+        /// <summary>
+        /// Acceptera förfrågan från annan spelare
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="g"></param>
+        /// <returns></returns>
         public bool AcceptQuery(BuySellQuery query, Game g)
         {
 

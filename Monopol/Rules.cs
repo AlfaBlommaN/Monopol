@@ -13,6 +13,12 @@ namespace Monopol
     }
     static class Rules
     {
+        /// <summary>
+        /// Analyserar spelets nuvarande situation och kollar om det stämmer överrens med reglerna.
+        /// T.ex. om en spelare får köpa den egendom som spelaren står på.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="game"></param>
         static public void CheckState(Player player, Game game)
         {
             player.AllowPlayerToBuyProperty(false);

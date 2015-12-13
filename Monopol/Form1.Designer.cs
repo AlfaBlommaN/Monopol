@@ -30,10 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.statsTextBox = new System.Windows.Forms.RichTextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.buttonDice = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.statsTextBox = new System.Windows.Forms.RichTextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -51,6 +51,30 @@
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             this.toolStrip1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStrip1_KeyPress);
+            // 
+            // buttonDice
+            // 
+            this.buttonDice.Image = ((System.Drawing.Image)(resources.GetObject("buttonDice.Image")));
+            this.buttonDice.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.buttonDice.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonDice.Name = "buttonDice";
+            this.buttonDice.Size = new System.Drawing.Size(75, 44);
+            this.buttonDice.Text = "Starta spelet";
+            this.buttonDice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonDice.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.buttonDice.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.Enabled = false;
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(83, 44);
+            this.toolStripButton2.Text = "Sälj egendom";
+            this.toolStripButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // statsTextBox
             // 
@@ -74,30 +98,6 @@
             this.pictureBox1.Size = new System.Drawing.Size(836, 685);
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
-            // 
-            // buttonDice
-            // 
-            this.buttonDice.Image = ((System.Drawing.Image)(resources.GetObject("buttonDice.Image")));
-            this.buttonDice.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.buttonDice.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.buttonDice.Name = "buttonDice";
-            this.buttonDice.Size = new System.Drawing.Size(81, 44);
-            this.buttonDice.Text = "Nästa spelare";
-            this.buttonDice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonDice.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.buttonDice.Click += new System.EventHandler(this.toolStripButton1_Click);
-            // 
-            // toolStripButton2
-            // 
-            this.toolStripButton2.Enabled = false;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(83, 44);
-            this.toolStripButton2.Text = "Sälj egendom";
-            this.toolStripButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // Form1
             // 

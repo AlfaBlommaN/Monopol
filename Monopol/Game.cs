@@ -6,25 +6,22 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace Monopol
 {
-    public enum BuyOrSell { Buy, Sell } 
+    public enum BuyOrSell { Buy, Sell }
     public class Game
     {
-        private Color[] colors = new Color[] {Color.Blue, Color.Red, Color.Purple, Color.Orange, Color.DarkGreen, Color.Black};
+        private Color[] colors = new Color[] { Color.Blue, Color.Red, Color.Purple, Color.Orange, Color.DarkGreen, Color.Black };
         const int jailpos = 10;
         private int playerturn = 0;
         public List<Player> players = new List<Player>(6);
         public int[] lastThrow { get; private set; }
-
         public Space[] board = new Space[40];
-
         public Bisyssla currentBisys = new Bisyssla("", 0);
         private List<Bisyssla> bisysslor = new List<Bisyssla>();
-
-
 
         private void NextTurn()
         {
@@ -37,22 +34,19 @@ namespace Monopol
                 NextTurn();
         }
 
-
-
-        public int[] throw_dice()
+        public int[] ThrowDice()
         {
             NextTurn();
-            Debug.WriteLine("\n" + players[playerturn].name);
-            Debug.WriteLine("Cash: " + players[playerturn].cash.ToString());
-            int[] dices = new int[2];
+            Debug.WriteLine("\n" + players[playerturn].name + "\nCash: " + players[playerturn].cash.ToString());
+            int[] dice = new int[2];
             Random rnd = new Random();
-            dices[1] = rnd.Next(1, 7);
-            dices[0] = rnd.Next(1, 7);
-            players[playerturn].Go(dices[0] + dices[1]);
-            Debug.WriteLine("Tärning: " + (dices[0] + dices[1]).ToString());
+            dice[1] = rnd.Next(1, 7);
+            dice[0] = rnd.Next(1, 7);
+            players[playerturn].Go(dice[0] + dice[1]);
+            Debug.WriteLine("Tärning: " + (dice[0] + dice[1]).ToString());
             Rules.CheckState(players[playerturn], this);
-            lastThrow = dices;
-            return dices;
+            lastThrow = dice;
+            return dice;
         }
 
         public Player GetCurrPlayer()
@@ -67,7 +61,6 @@ namespace Monopol
 
         public void addPlayer(bool isAI, string name)
         {
-            Debug.WriteLine("isAI: " + isAI);
             if (players.Count() < 6)
             {
                 if (isAI)
@@ -81,7 +74,6 @@ namespace Monopol
 
         public void addPlayer(bool isAI, string name, int cash, int position, bool prisoner)
         {
-            Debug.WriteLine("isAI: " + isAI);
             if (players.Count() < 6)
             {
                 if (isAI)
@@ -154,52 +146,67 @@ namespace Monopol
             XElement boardState = new XElement("Board",
 
             from space in board
-            where (space.GetType() == typeof(Property) && ((Property)space).owner != "")  
+            where (space.GetType() == typeof(Property) && ((Property)space).owner != "")
             select new XElement("Property",
                 new XAttribute("Name", ((Property)space).name),
                 new XAttribute("Owner", ((Property)space).owner))
 
             );
 
-            xdoc.Root.Add(new XComment("Information om spelarna"), playersState); 
+            xdoc.Root.Add(new XComment("Information om spelarna"), playersState);
             xdoc.Root.Add(new XComment("Ändringar i spelbrädet"), boardState);
             xdoc.Save("Data/State.xml");
             watcher.EnableRaisingEvents = true;
         }
 
-        public void LoadState()
+        public void LoadState(FileSystemWatcher watcher)
         {
-            var playerState = from members in XDocument.Load("Data/State.xml").Root.Elements().Descendants("Player")
-                              select members;
-
-            var propertyState = from members in XDocument.Load("Data/State.xml").Root.Elements().Descendants("Property")
-                              select members;
-
-            players = new List<Player>();
-
-            foreach (var player in playerState)
+            System.Threading.Thread.Sleep(500);
+            watcher.EnableRaisingEvents = false;
+            try
             {
-                addPlayer(Boolean.Parse(player.Attribute("AI").Value), player.Attribute("Name").Value, Int32.Parse(player.Attribute("Cash").Value), Int32.Parse(player.Attribute("Position").Value), Boolean.Parse(player.Attribute("Prisoner").Value));
-                Debug.WriteLine("Player: " + player);
-            }
-            
-            
-            foreach (Space p in board)
-            {
-                
-                if (p is Property)
+                var playerState = from members in XDocument.Load("Data/State.xml").Root.Elements().Descendants("Player")
+                                  select members;
+
+                var propertyState = from members in XDocument.Load("Data/State.xml").Root.Elements().Descendants("Property")
+                                    select members;
+
+                players = new List<Player>();
+
+                foreach (var player in playerState)
                 {
-                    ((Property)p).owner = "";
-                    foreach (var x in propertyState)
+                    addPlayer(
+                        Boolean.Parse(player.Attribute("AI").Value),
+                                    player.Attribute("Name").Value, 
+                        Int32.Parse(player.Attribute("Cash").Value), 
+                        Int32.Parse(player.Attribute("Position").Value), 
+                        Boolean.Parse(player.Attribute("Prisoner").Value));
+                }
+
+
+                foreach (Space p in board)
+                {
+
+                    if (p is Property)
                     {
-                        if (((Property)p).name == x.Attribute("Name").Value)
-                            ((Property)p).owner = x.Attribute("Owner").Value;
+                        ((Property)p).owner = "";
+                        foreach (var x in propertyState)
+                        {
+                            if (((Property)p).name == x.Attribute("Name").Value)
+                                ((Property)p).owner = x.Attribute("Owner").Value;
+                        }
                     }
+
                 }
 
             }
-            foreach (var prop in propertyState)
-                Debug.WriteLine("Prop: " + prop);
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+
+            watcher.EnableRaisingEvents = true;
         }
 
         public void LoadInitData()
@@ -213,7 +220,6 @@ namespace Monopol
             {
                 int position = Int32.Parse(x.Attribute("Position").Value);
 
-                Debug.WriteLine("Space: " + x);
                 switch (x.Name.ToString())
                 {
                     case "Space":

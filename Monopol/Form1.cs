@@ -36,18 +36,24 @@ namespace Monopol
         }
 
 
+        /// <summary>
+        /// Det som skall hända när spelaren trycker på slå tärning-knappen.
+        /// Denna funktion kallar på diverse funktioner i spellogiken beroende på
+        /// vilka beslut en spelare gör med olika pop-up rutor i GUI.
+        /// </summary>
         private void throwDice()
         {
             toolStripButton2.Enabled = true;
-            game.throw_dice();
+            buttonDice.Text = "Nästa spelare";
+            game.ThrowDice();
             DisplayMessage(game.GetCurrPlayer().name + " slår " + game.lastThrow.Sum());
 
-            UpdateGraphics();
+            UpdateGraphics();   // Uppdatera grafiken en gång när spelaren flyttat på sig.
+            updateStats();
 
             while (game.GetCurrPlayer().pendingQueries.Count > 0)
             {
                 BuySellQuery query = game.GetCurrPlayer().pendingQueries.Dequeue();
-                Debug.WriteLine("KÖ! " + query.property);
                 if (query.type == BuyOrSell.Sell)
                 {
                     game.GetCurrPlayer().SetDecision(DisplayDialog("Vill du köpa " + query.property + " av " + query.sender + " för " + query.offer + "?"));
@@ -102,15 +108,20 @@ namespace Monopol
                 DisplayMessage(game.GetCurrPlayer().name + " har gått i pension och är inte längre med i spelet.");
             }
 
-            UpdateGraphics();
-            updateStats();
+            UpdateGraphics();   // Uppdatera grafiken igen när spelaren har gjort sina beslut.
+            updateStats();      // Visa nya värden i statistikrutan
+
             if (game.checkIfGameOver())
             {
-                DisplayMessage("Spelet är över!");
+                var remaining = from p in game.players
+                                   where p.active == true
+                                   select p;
+                DisplayMessage("Spelet är över!\n" + remaining.Single().name + " har vunnit!");
                 endGame();
+                return;
             }
 
-            game.Save(watcher);
+            game.Save(watcher); // Eftersom ändringar i spelet har skett, sparas spelet till Data/State.xml
 
             if (game.GetCurrPlayer() is AI)
                 throwDice();
@@ -126,6 +137,10 @@ namespace Monopol
             toolStripButton2.Enabled = false;
         }
 
+
+        /// <summary>
+        /// Uppdaterar informationen som visas i textrutan till höger om spelpanen.
+        /// </summary>
         private void updateStats()
         {
             Control.CheckForIllegalCrossThreadCalls = false;
@@ -153,9 +168,12 @@ namespace Monopol
         }
 
 
+        /// <summary>
+        /// Sköter all grafik som inte är uppbyggd av vanliga forms-objekt.
+        /// Dvs spelplanen, spelares ikoner och indikatorer för vem som äger en gata
+        /// </summary>
         private void UpdateGraphics()
         {
-            updateStats();
             graphics = pictureBox1.CreateGraphics();
             graphics.DrawImage(background, 0, 0);
             Point gfxPos = new Point(0, 0);
@@ -186,6 +204,11 @@ namespace Monopol
             }
         }
 
+        /// <summary>
+        /// Funktion som ritar ut en färgad rektangel runt de gator som ägs av en specifik spelare.
+        /// Används av UpdateGraphics-funktionen.
+        /// </summary>
+        /// <param name="p">Spelare</param>
         private void DrawOwnerRectangle(Player p)
         {
             List<int> indexes = new List<int>();
@@ -219,6 +242,14 @@ namespace Monopol
             game.GetCurrPlayer().BuyProperty();
         }
 
+
+        /// <summary>
+        /// En av två funktioner som använder sig av DialogForm-klassen för att visa ett meddelande.
+        /// DisplayDialog låter spelaren trycka ja eller nej för att göra ett beslut baserat på meddelandet som skrivs ut.
+        /// Används t.ex. vid köp av egendom.
+        /// </summary>
+        /// <param name="text">Meddelande</param>
+        /// <returns></returns>
         private bool DisplayDialog(string text)
         {
             DialogForm dialog = new DialogForm(text, game.GetCurrPlayer() is AI);
@@ -226,6 +257,13 @@ namespace Monopol
             return dialog.ShowDialog() == DialogResult.Yes;
         }
 
+        /// <summary>
+        /// En av två funktioner som använder sig av DialogForm-klassen för att visa ett meddelande.
+        /// DisplayMessage visar ett meddelande. Spelaren kan bara trycka på OK.
+        /// Används t.ex. när man får ett meddelande om bisysslor.
+        /// </summary>
+        /// <param name="text">Meddelande</param>
+        /// <returns></returns>
         private bool DisplayMessage(string text)
         {
             DialogForm dialog = new DialogForm(text, true, game.GetCurrPlayer() is AI);
@@ -261,7 +299,8 @@ namespace Monopol
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            watcher.Changed += new FileSystemEventHandler(WatcherChanged);
+            watcher.EnableRaisingEvents = true;
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -270,28 +309,35 @@ namespace Monopol
             menu.StartPosition = FormStartPosition.CenterParent;
             var result = menu.ShowDialog(this);
             if (result == DialogResult.Yes)
+            {
                 game.LoadInitData();
+                updateStats();
+                UpdateGraphics();
+            }
             else if (result == DialogResult.OK)
             {
                 game.LoadInitData();
-                game.LoadState();
+                game.LoadState(watcher);
+                updateStats();
+                UpdateGraphics();
             }
             else
                 Application.Exit();
 
-            updateStats();
-            UpdateGraphics();
 
-            watcher.Changed += new FileSystemEventHandler(WatcherChanged);
-            watcher.EnableRaisingEvents = true;
         }
 
+        /// <summary>
+        /// Funktion som kallas när watcher har upptäckt att filer i Datamappen har ändrats.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void WatcherChanged(object sender, System.IO.FileSystemEventArgs e)
         {
-            game.LoadState();
+            game.LoadState(watcher);
             UpdateGraphics();
             updateStats();
-            DisplayMessage("Filer har ändrats! Spelet har uppdaterats till senaste version");
+            DisplayMessage("Filer har ändrats!\nSpelet har uppdaterats till senaste version");
         }
 
 
